@@ -1,0 +1,45 @@
+.glass-panel {
+     background: var(--card-bg);
+     border: none;
+     border-radius: 16px;
+     box-shadow: var(--card-shadow);
+     padding: 1.5rem;
+     overflow: hidden;
+     position: relative;
+     /* Ensure it looks like a clean card */
+}
+
+.glass-stat {
+     display: flex;
+     flex-direction: column;
+     gap: 0.25rem;
+}
+
+.label {
+     font-size: 0.75rem;
+     color: var(--text-secondary);
+     text-transform: uppercase;
+     letter-spacing: 0.05em;
+     font-weight: 500;
+}
+
+.value {
+     font-size: 1.5rem;
+     font-weight: 400;
+     /* Lighter weight for cleaner look */
+     color: var(--text-color);
+}
+
+.value.income {
+     color: var(--success);
+}
+
+.value.expense {
+     color: var(--text-color);
+}
+
+/* Keep expense neutral or specific if needed, standard map style is subtle */
+.value.expense::before {
+     content: '';
+     color: var(--text-color);
+}
