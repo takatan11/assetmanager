@@ -50,10 +50,24 @@ export function useTransactions() {
           return acc;
      }, { income: 0, expense: 0 });
 
+     // Import functionality
+     const importTransactions = (newTransactions) => {
+          if (!Array.isArray(newTransactions)) {
+               throw new Error('Invalid data format');
+          }
+          // Basic validation
+          const valid = newTransactions.every(t => t.id && t.date && t.amount !== undefined && t.type);
+          if (!valid) {
+               throw new Error('Invalid transaction data');
+          }
+          setTransactions(newTransactions);
+     };
+
      return {
           transactions, // Return raw for global usage if needed
           addTransaction,
           deleteTransaction,
+          importTransactions, // Export this
           monthlyList,
           // Helper to get specific month data
           getTransactionsByMonth: (monthStr) => {

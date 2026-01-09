@@ -7,19 +7,22 @@ import BalanceBarChart from './components/BalanceBarChart';
 import TransactionList from './components/TransactionList';
 import BottomNav from './components/BottomNav';
 import MonthlyArchive from './components/MonthlyArchive';
-import { ChevronLeft } from 'lucide-react';
+import DataMigration from './components/DataMigration';
+import { ChevronLeft, Settings, X } from 'lucide-react';
 import './styles/index.css';
 
 function App() {
      const [view, setView] = useState('input');
      const [selectedMonth, setSelectedMonth] = useState(null); // Format: "YYYY-MM"
+     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
      const {
           transactions,
           addTransaction,
           deleteTransaction,
           monthlyList,
-          getTransactionsByMonth
+          getTransactionsByMonth,
+          importTransactions
      } = useTransactions();
 
      // Logic:
@@ -86,6 +89,21 @@ function App() {
                     <h1 style={{ fontSize: '1.25rem', margin: 0, textAlign: 'left', flex: 1 }}>
                          {headerTitle}
                     </h1>
+                    <button
+                         onClick={() => setIsSettingsOpen(true)}
+                         style={{
+                              border: 'none',
+                              background: 'transparent',
+                              padding: '0.5rem',
+                              boxShadow: 'none',
+                              cursor: 'pointer',
+                              color: 'var(--text-secondary)',
+                              display: 'flex',
+                              alignItems: 'center'
+                         }}
+                    >
+                         <Settings size={24} />
+                    </button>
                </header>
 
                <div style={{ padding: '0 1rem' }}>
@@ -125,6 +143,55 @@ function App() {
                </div>
 
                <BottomNav currentView={view} onChange={(v) => { setView(v); setSelectedMonth(null); }} />
+
+               {/* Settings/Migration Modal */}
+               {isSettingsOpen && (
+                    <div style={{
+                         position: 'fixed',
+                         top: 0,
+                         left: 0,
+                         right: 0,
+                         bottom: 0,
+                         background: 'rgba(0,0,0,0.5)',
+                         zIndex: 2000,
+                         display: 'flex',
+                         alignItems: 'center',
+                         justifyContent: 'center',
+                         padding: '1.5rem'
+                    }}>
+                         <div className="glass-card" style={{
+                              width: '100%',
+                              maxWidth: '400px',
+                              background: '#fff', // Solid background for legibility
+                              padding: '1.5rem',
+                              position: 'relative',
+                              maxHeight: '90vh',
+                              overflowY: 'auto'
+                         }}>
+                              <button
+                                   onClick={() => setIsSettingsOpen(false)}
+                                   style={{
+                                        position: 'absolute',
+                                        top: '1rem',
+                                        right: '1rem',
+                                        background: 'transparent',
+                                        border: 'none',
+                                        boxShadow: 'none',
+                                        cursor: 'pointer',
+                                        color: 'var(--text-secondary)'
+                                   }}
+                              >
+                                   <X size={24} />
+                              </button>
+                              <h2 style={{ marginTop: 0, marginBottom: '1.5rem', fontSize: '1.25rem', textAlign: 'center' }}>データ管理</h2>
+                              <DataMigration
+                                   transactions={transactions}
+                                   onImport={importTransactions}
+                                   onClose={() => setIsSettingsOpen(false)}
+                              />
+                         </div>
+                    </div>
+               )}
           </div>
      );
 }
