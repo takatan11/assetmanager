@@ -40,7 +40,12 @@ function App() {
 
      const totalIncome = statsTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
      const totalExpense = statsTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-     const balance = totalIncome - totalExpense;
+
+     // Calculate cumulative balance (Total Assets) up to the target month
+     const cumulativeTransactions = transactions.filter(t => t.date.slice(0, 7) <= targetMonth);
+     const balance = cumulativeTransactions.reduce((sum, t) => {
+          return t.type === 'income' ? sum + t.amount : sum - t.amount;
+     }, 0);
 
      const handleMonthSelect = (month) => {
           setSelectedMonth(month);
