@@ -30,7 +30,7 @@ export default function DataMigration({ transactions, onImport, onClose }) {
           try {
                const encrypted = await encryptData(transactions, password);
                const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-               downloadFile(encrypted, `asset_backup_${dateStr}.dat`);
+               downloadFile(encrypted, `asset_backup_${dateStr}.txt`);
                setStatus({ type: 'success', msg: 'バックアップファイルを作成しました' });
                setTimeout(() => onClose(), 2000); // Close after success
           } catch (e) {
@@ -211,7 +211,6 @@ export default function DataMigration({ transactions, onImport, onClose }) {
                               {isLoading ? '処理中...' : actionLabel}
                               <input
                                    type="file"
-                                   accept=".dat,.json,.backup"
                                    onChange={onSubmit}
                                    style={{ display: 'none' }}
                                    disabled={isLoading || !password}
